@@ -1,20 +1,26 @@
-import *as React from 'react';
+import React from 'react';
 import './App.css';
-import {connect} from "react-redux";
-import {Dispatch} from 'redux';
 import {AppState} from "./redux/store";
-import {ITodoList} from './types/ActionTypes';
+import {ActionsTypes, ITodoList} from './types/ActionTypes';
 import TodoList from "./components/TodoList";
+import {setTodoListsTC} from "./redux/reducer";
+import {ThunkDispatch} from 'redux-thunk';
+import {connect} from 'react-redux';
+
 
 interface IMstp {
     todoLists: ITodoList[]
 }
 
 interface IMdtp {
-
+    getTodoLists: () => void
 }
 
 class App extends React.Component<IMstp & IMdtp> {
+    componentDidMount(): void {
+        this.props.getTodoLists()
+    }
+
     render() {
         let todoLists = this.props.todoLists.map(tl => {
             return <TodoList key={tl.id} id={tl.id} title={tl.title} tasks={tl.tasks}/>
@@ -32,8 +38,13 @@ const mstp = (state: AppState): IMstp => {
         todoLists: state.todolists.todoLists
     }
 };
-const mdtp = (dispatch: Dispatch) => {
-
+const mdtp = (dispatch: ThunkDispatch<any, any, ActionsTypes>): IMdtp => {
+    return {
+        getTodoLists: () => {
+            let thunk = setTodoListsTC();
+            dispatch(thunk)
+        }
+    }
 };
 
 export default connect(mstp, mdtp)(App);

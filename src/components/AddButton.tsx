@@ -1,4 +1,5 @@
 import * as React from "react";
+
 const s = require("./TodoList.module.css");
 
 interface IProps {
@@ -8,8 +9,8 @@ interface IProps {
 class AddButton extends React.Component<IProps> {
     render() {
         return (
-            <div onClick={this.props.addTask} className={s.buttonAddWrapper}>
-
+            <div className={s.buttonAddWrapper}>
+                <div onClick={this.props.addTask} className={s.buttonAdd}></div>
             </div>
         )
     }
