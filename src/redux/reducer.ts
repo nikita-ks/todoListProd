@@ -3,8 +3,12 @@ import {
     ITodoList,
     ActionsTypes,
     ITask,
-    ISetTasksActionTypes,
-    IAddTaskActionTypes, ITaskUpdate, IDeleteTaskActionTypes
+    IAddTaskActionTypes,
+    ITaskUpdate,
+    IDeleteTaskActionTypes,
+    IChangeListTitle,
+    IAddListActionTypes,
+    IChangeTaskActionTypes, IDeleteList,
 } from "../types/ActionTypes";
 import {Dispatch} from "redux";
 import {api} from "../dal/api";
@@ -13,17 +17,20 @@ import {AppState} from "./store";
 export const SET_TODOLISTS = 'todolist/reducer/SET_TODOLISTS';
 export const SET_TASKS = 'todolist/reducer/SET_TASKS';
 export const ADD_TASK = 'todolist/reducer/ADD_TASK';
+export const ADD_LIST = 'todolist/reducer/ADD_LIST';
 export const CHANGE_TASK = 'todolist/reducer/CHANGE_TASK';
 export const DELETE_TASK = 'todolist/reducer/DELETE_TASK';
+export const DELETE_LIST = 'todolist/reducer/DELETE_LIST';
+export const CHANGE_LIST_TITLE = 'todolist/reducer/CHANGE_LIST_TITLE';
 
 interface IInitialState {
-    todoLists: ITodoList[]
+    todoLists: ITodoList[];
 }
 
 let initialState: IInitialState = {
     todoLists: []
 };
-export const reducer = (state: IInitialState = initialState, action: ActionsTypes): IInitialState => {
+export const reducer = (state = initialState, action: ActionsTypes): IInitialState => {
     switch (action.type) {
         case SET_TODOLISTS: {
             return {...state, todoLists: [...state.todoLists, action.todoList]}
@@ -52,6 +59,12 @@ export const reducer = (state: IInitialState = initialState, action: ActionsType
                 })
             }
         }
+        case ADD_LIST: {
+            return {
+                ...state,
+                todoLists: [...state.todoLists, action.newList]
+            }
+        }
         case CHANGE_TASK: {
             return {
                 ...state,
@@ -66,6 +79,21 @@ export const reducer = (state: IInitialState = initialState, action: ActionsType
                                     return t
                                 }
                             })
+                        }
+                    } else {
+                        return tl
+                    }
+                })
+            }
+        }
+        case CHANGE_LIST_TITLE: {
+            return {
+                ...state,
+                todoLists: state.todoLists.map((tl: ITodoList) => {
+                    if (tl.id === action.listId) {
+                        return {
+                            ...tl,
+                            title: action.title
                         }
                     } else {
                         return tl
@@ -90,6 +118,12 @@ export const reducer = (state: IInitialState = initialState, action: ActionsType
                 })
             }
         }
+        case DELETE_LIST: {
+            return {
+                ...state,
+                todoLists: state.todoLists.filter((tl: ITodoList) => tl.id !== action.listId)
+            }
+        }
         default:
             return state;
     }
@@ -99,18 +133,32 @@ const setTodolistsAC = (todoList: ITodoList): ISetTodoListActionTypes => {
     return {type: SET_TODOLISTS, todoList}
 };
 
-const setTasksAC = (todolistId: string, tasks: ITask[]): ISetTasksActionTypes => {
-    return {type: SET_TASKS, todolistId, tasks}
-};
 const addTaskAC = (todolistId: string, newTask: ITask): IAddTaskActionTypes => {
     return {type: ADD_TASK, todolistId, newTask}
 };
-const changeTaskAC = (listId: string, task: ITask) => {
+const addListAC = (newList: ITodoList): IAddListActionTypes => {
+    return {type: ADD_LIST, newList}
+};
+const changeTaskAC = (listId: string, task: ITask): IChangeTaskActionTypes => {
     return {type: CHANGE_TASK, listId, task}
 };
 
+// const del = (listId: string, taskId: string = '') => {
+//     if (taskId) {
+//         return {type: DELETE_TASK, listId, taskId};
+//     } else {
+//         return {type: DELETE_LIST, listId};
+//     }
+// }
+
 const deleteTaskAC = (listId: string, taskId: string): IDeleteTaskActionTypes => {
     return {type: DELETE_TASK, listId, taskId};
+};
+const deleteListAC = (listId: string): IDeleteList => {
+    return {type: DELETE_LIST, listId};
+};
+const changeListTitleAC = (listId: string, title: string): IChangeListTitle => {
+    return {type: CHANGE_LIST_TITLE, listId, title}
 };
 
 export const setTodoListsTC = () => (dispatch: Dispatch) => {
@@ -130,14 +178,30 @@ export const addTaskTC = (todolistId: string, title: string, description: string
         })
     })
 };
+export const addListTC = (title: string) => (dispatch: Dispatch) => {
+    api.addList(title).then((newList: ITodoList) => {
+        dispatch(addListAC({...newList, tasks: []}))
+    })
+};
 
-export const changeTaskTC = (listId: string, taskId: string, obj: ITaskUpdate) => (dispatch: Dispatch, getState: Function) => {
-    let task = getState().todolists.todoLists.find((tl: ITodoList) => tl.id === listId)
-        .tasks.find((t: ITask) => {
-            return t.id === taskId
-        });
-    api.changeTask(listId, taskId, {...task, ...obj}).then((res: ITask) => {
-        dispatch(changeTaskAC(listId, res))
+export const changeTaskTC = (listId: string, taskId: string, obj: ITaskUpdate) => (dispatch: Dispatch, getState: () => AppState) => {
+    let todoList = getState().todolists.todoLists.find((tl: ITodoList) => tl.id === listId);
+    if (todoList) {
+        let task = todoList.tasks.find((t: ITask) => t.id === taskId);
+        if (task) {
+            let newTask = {...task, ...obj};
+            api.changeTask(listId, taskId, newTask).then((res: ITask) => {
+                dispatch(changeTaskAC(listId, res))
+            })
+        }
+    }
+};
+
+export const changeListTitleTC = (listId: string, title: string) => (dispatch: Dispatch) => {
+    api.changeListTitle(listId, title).then(res => {
+        if (res.resultCode === 0) {
+            dispatch(changeListTitleAC(listId, title))
+        }
     })
 };
 
@@ -145,6 +209,13 @@ export const deleteTaskTC = (listId: string, taskId: string) => (dispatch: Dispa
     api.deleteTask(listId, taskId).then(code => {
         if (code === 0) {
             dispatch(deleteTaskAC(listId, taskId))
+        }
+    })
+};
+export const deleteListTC = (listId: string) => (dispatch: Dispatch) => {
+    api.deleteList(listId).then(code => {
+        if (code === 0) {
+            dispatch(deleteListAC(listId))
         }
     })
 };

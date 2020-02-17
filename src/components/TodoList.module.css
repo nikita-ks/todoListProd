@@ -1,12 +1,31 @@
+.todoListsFormWrapper {
+    width: 100%;
+    height: 100%;
+    background-color: #0a0224;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(auto-fit, 80px);
+    grid-gap: 10px;
+    position: relative;
+}
+
+.todoListsFormWrapper button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
 .todoListWrapper {
-    /*position: relative;*/
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    width: 300px;
-    height: 450px;
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+    margin: -10px -10px -10px 0;
     background-color: #ff2851;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .todoListWrapper + .todoListWrapper {
@@ -15,6 +34,7 @@
 
 .headerWrapper {
     /*background-color: #0a0224;*/
+    position: relative;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -24,15 +44,29 @@
     padding: 30px 0;
 }
 
-.headerWrapper .title {
-    font-size: 30px;
-    font-weight: 700;
-    font-family: Bebas-Regular,sans-serif;
-
+.arrowBack {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    cursor: pointer;
 }
 
+.inputTitle {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #ff2851;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    font-family: Bebas-Regular, sans-serif;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+
 .headerWrapper .tasksCounter {
-    font-family: Bebas-Regular,sans-serif;
+    font-family: Bebas-Regular, sans-serif;
     font-size: 15px;
     font-weight: 400;
 }
@@ -40,12 +74,30 @@
 .tasksWrapper {
     background-color: #ff2851;
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     padding: 0 15px;
+    overflow-y: auto;
 }
+
+.tasksWrapper::-webkit-scrollbar {
+    width: 5px;
+
+
+    background: transparent;
+}
+
+.tasksWrapper::-webkit-scrollbar-track {
+}
+
+.tasksWrapper::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #0a0224;
+}
+
 
 .taskWrapper {
     width: 100%;
@@ -53,6 +105,7 @@
     justify-content: flex-start;
     align-items: center;
     background-color: transparent;
+    cursor: pointer;
 }
 
 
@@ -127,9 +180,12 @@
 .taskWrapper .taskDesc {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     color: #fff;
-    /*margin-bottom: 10px;*/
+    width: 100%;
+    font-family: BebasNeue-Light, sans-serif;
+    letter-spacing: 1px;
+
 }
 
 .taskWrapper {
@@ -137,39 +193,68 @@
 }
 
 .taskWrapper .taskTitle {
-    font-size: 20px;
-    line-height: 20px;
+    font-size: 24px;
+    line-height: 24px;
     font-weight: bold;
-    font-family: Existence-Light,sans-serif;
+
 }
 
 .taskWrapper .taskText {
-    font-size: 15px;
-    line-height: 15px;
-    font-family: Existence-Light,sans-serif;
+    font-size: 20px;
+    line-height: 20px;
+    font-family: BebasNeue-Book, sans-serif;
+
 }
 
 .deleteButton {
     display: block;
     position: relative;
-    /*bottom: 0;*/
-    /*right: 0;*/
+    flex-shrink: 0;
     margin-left: auto;
-    background-color: #0a0224; /*ff4f6d*/
+    background-color: #0a0224;
     width: 18px;
     height: 18px;
     border-radius: 100%;
     cursor: pointer;
+    transition: all .3s ease;
+}
+
+.todoListsWrapper {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #3f3c58;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: all .3s ease;
+    text-transform: uppercase;
+    font-family: Bebas-Regular, sans-serif;
+    font-size: 24px;
+    line-height: 24px;
+}
+
+.todoListsWrapper:hover {
+    background-color: #3f3c58b5;
+}
+
+.todoListsWrapper:before {
+    /*content: 'delete';*/
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.todoListsWrapper:hover .deleteButton {
+    opacity: 1 !important;
 }
 
 .deleteButton:before, .deleteButton:after {
     position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    content: ' ';
+    left: calc(50% - 1px);
+    top: calc(50% - 5px);
+    content: '';
     height: 10px;
     width: 2px;
     background-color: #fff;
@@ -195,13 +280,29 @@
     padding: 20px;
 }
 
-.addTaskFormWrapper .inputWrapper {
+.addTaskFormWrapper .inputWrapper,
+.addTaskFormWrapper .inputWrapper input {
     width: 100%;
+    font-family: BebasNeue-Book, sans-serif;
+    font-size: 16px;
+    line-height: 16px;
+    margin-top: 10px;
+    letter-spacing: 1px;
+}
+
+.title {
+    font-size: 30px;
+    font-weight: 700;
+    font-family: Bebas-Regular, sans-serif;
+}
+
+.title.h4 {
+    font-size: 20px;
+    font-weight: 400;
 }
 
 .addTaskFormWrapper .title {
     color: #ff2851;
-    font-weight: bold;
 }
 
 .addTaskFormWrapper input {
@@ -231,7 +332,7 @@
 .addTaskFormWrapper .addTitle:after {
     content: '';
     position: absolute;
-    bottom: -10px;
+    bottom: -5px;
     left: 0;
     width: 100%;
     height: 2px;
@@ -251,7 +352,6 @@
 .buttonAdd {
     display: block;
     position: relative;
-
     background-color: #0a0224;
     width: 30px;
     height: 30px;
@@ -261,10 +361,10 @@
 
 .buttonAdd:before, .buttonAdd:after {
     position: absolute;
-    left: 14px;
-    top: 8px;
+    left: calc(50% - 1px);
+    top: calc(50% - 7px);
     content: ' ';
-    height: 15px;
+    height: 14px;
     width: 2px;
     background-color: #fff;
 }
@@ -281,6 +381,11 @@
     width: 100%;
     display: flex;
     justify-content: space-around;
+}
+.buttonFormWrapper button{
+    font-family: BebasNeue-Book,sans-serif;
+    /*font-weight: 600;*/
+    font-size: 18px;
 }
 
 .buttonFormWrapper .btnClose {

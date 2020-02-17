@@ -1,4 +1,12 @@
-import {SET_TODOLISTS, SET_TASKS, ADD_TASK, CHANGE_TASK, DELETE_TASK} from "../redux/reducer";
+import {
+    SET_TODOLISTS,
+    SET_TASKS,
+    ADD_TASK,
+    ADD_LIST,
+    CHANGE_TASK,
+    DELETE_TASK, CHANGE_LIST_TITLE, DELETE_LIST,
+} from "../redux/reducer";
+import exp from "constants";
 
 
 export enum TasksStatus {
@@ -18,7 +26,6 @@ export interface ITask {
     startDate?: string | null
     deadline?: string | null
     addedDate: string
-    desc: string
 }
 
 export interface ITodoList {
@@ -47,48 +54,45 @@ export interface ISetTasksActionTypes {
     todolistId: string;
 }
 
-//
-// export interface IAddTodoListActionTypes {
-//     type: typeof ADD_TODOLIST;
-//     newToDoLists: any;
-// }
-
 export interface IAddTaskActionTypes {
     type: typeof ADD_TASK;
     todolistId: string;
     newTask: ITask;
 }
 
+export interface IAddListActionTypes {
+    type: typeof ADD_LIST;
+    newList: ITodoList;
+}
+
 export interface IChangeTaskActionTypes {
     type: typeof CHANGE_TASK;
     listId: string;
-    taskId: string;
     task: ITask;
 }
 
-// export interface IDeleteTodoListActionTypes {
-//     type: typeof DELETE_TODOLIST;
-//     toDoListId: string;
-// }
-//
 export interface IDeleteTaskActionTypes {
     type: typeof DELETE_TASK;
     listId: string;
     taskId: string;
 }
 
-//
-// export interface IUpdateListTitleActionTypes {
-//     type: typeof UPDATE_LIST;
-//     todolistId: string;
-//     newTitle: string;
-// }
-//
+export interface IChangeListTitle {
+    type: typeof CHANGE_LIST_TITLE;
+    title: string;
+    listId: string
+}
+export interface IDeleteList {
+    type:typeof DELETE_LIST;
+    listId:string;
+}
+
 export type ActionsTypes = ISetTodoListActionTypes
     | ISetTasksActionTypes
-    // | IAddTodoListActionTypes
+    | IAddListActionTypes
     | IAddTaskActionTypes
     | IChangeTaskActionTypes
-// | IDeleteTodoListActionTypes
     | IDeleteTaskActionTypes
-// | IUpdateListTitleActionTypes
+    | IChangeListTitle
+    | IDeleteList
+    | IChangeTaskActionTypes;

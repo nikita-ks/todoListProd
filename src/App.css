@@ -5,3 +5,15 @@
     align-items: center;
     background-color: #bbb;
 }
+
+.App-in {
+    background-color: #0a0224;
+    width: 300px;
+    height: 450px;
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    border-radius: 10px;
+}

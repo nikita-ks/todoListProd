@@ -1,6 +1,7 @@
 import * as React from "react";
 import {ChangeEvent} from "react";
 import {ITask, ITaskUpdate} from "../types/ActionTypes";
+import ButtonSaveForm from "./ButtonSaveForm";
 
 const s = require("./TodoList.module.css");
 
@@ -8,7 +9,7 @@ interface IProps {
     deActiveAddForm: () => void;
     addTask: (title: string, description: string) => void;
     changeTask: (taskId: string, obj: ITaskUpdate) => void;
-    currentTask?: ITask | null
+    currentTask: ITask | null
 }
 
 interface IState {
@@ -32,10 +33,13 @@ class AddTaskForm extends React.Component<IProps, IState> {
     }
 
     changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
-        this.setState({title: e.currentTarget.value})
+        if (e.currentTarget.value.length <= 20) {
+            this.setState({title: e.currentTarget.value})
+        }
     };
     changeDesc = (e: ChangeEvent<HTMLInputElement>) => {
         this.setState({desc: e.currentTarget.value})
+
     };
     addTask = () => {
         if (this.props.currentTask) {
@@ -56,19 +60,19 @@ class AddTaskForm extends React.Component<IProps, IState> {
             <div className={s.addTaskFormWrapper}>
                 <div className={s.inputWrapper}>
                     <div className={s.addTitle}>
-                        <div className={s.title}>Title</div>
+                        <div className={`${s.title} ${s.h4}`}>Title</div>
                         <input value={this.state.title} onChange={this.changeTitle} type="text"
                                placeholder='Enter Task Title'/>
                     </div>
                     <div className={s.addText}>
-                        <div className={s.title}>Description</div>
+                        <div className={`${s.title} ${s.h4}`}>Description</div>
                         <input value={this.state.desc} onChange={this.changeDesc} type="text"
                                placeholder='Enter Task Description'/>
                     </div>
                 </div>
                 <div className={s.buttonFormWrapper}>
-                    <button className={s.btnClose} onClick={this.props.deActiveAddForm}>Close</button>
-                    <button className={s.btnSave} onClick={this.addTask}>{this.buttonText}</button>
+                    <ButtonSaveForm class={s.btnClose} onClick={this.props.deActiveAddForm} buttonText={'Close'}/>
+                    <ButtonSaveForm class={s.btnSave} onClick={this.addTask} buttonText={this.buttonText}/>
                 </div>
             </div>
         )

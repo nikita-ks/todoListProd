@@ -6,7 +6,7 @@ import AddButton from "./AddButton";
 import {ActionsTypes, ITask, ITaskUpdate} from "../types/ActionTypes";
 import {connect} from "react-redux";
 import {ThunkDispatch} from "redux-thunk";
-import {addTaskTC, changeTaskTC, deleteTaskTC} from "../redux/reducer";
+import {addTaskTC, changeListTitleTC, changeTaskTC, deleteTaskTC} from "../redux/reducer";
 
 const s = require("./TodoList.module.css");
 
@@ -14,17 +14,19 @@ interface IProps {
     title: string;
     id: string;
     tasks: ITask[];
+    closeList: () => void;
 }
 
 interface IState {
     addForm: boolean;
-    currentTask: null | ITask
+    currentTask: null | ITask;
 }
 
 interface IMDTP {
     addTask: (listId: string, title: string, description: string) => void
     changeTask: (listId: string, taskId: string, obj: ITaskUpdate) => void
     deleteTask: (listId: string, taskId: string) => void
+    changeListTitle: (listId: string, title: string) => void
 }
 
 class TodoList extends React.Component<IProps & IMDTP, IState> {
@@ -46,6 +48,9 @@ class TodoList extends React.Component<IProps & IMDTP, IState> {
         this.props.changeTask(this.props.id, taskId, obj);
         this.setState({currentTask: null})
     };
+    changeListTitle = (title: string) => {
+        this.props.changeListTitle(this.props.id, title)
+    };
 
     doubleClick = (task: ITask) => {
         this.setState({currentTask: task, addForm: true})
@@ -56,6 +61,7 @@ class TodoList extends React.Component<IProps & IMDTP, IState> {
 
     render() {
         let tasksCount = this.props.tasks.length;
+
         let addTaskForm = <AddTaskForm currentTask={this.state.currentTask} addTask={this.addTask}
                                        deActiveAddForm={this.deActiveAddForm} changeTask={this.changeTask}/>;
         let tasksForm =
@@ -64,12 +70,14 @@ class TodoList extends React.Component<IProps & IMDTP, IState> {
                                doubleClick={this.doubleClick}
                                deleteTask={this.deleteTask}
                                tasks={this.props.tasks}/>
-                <AddButton addTask={this.activeAddForm}/>
+                <AddButton addItem={this.activeAddForm}/>
             </>;
 
         return (
             <div className={s.todoListWrapper}>
-                <TodoListHeader addForm={this.state.addForm} title={this.props.title} tasksCount={tasksCount}/>
+                <TodoListHeader addForm={this.state.addForm} title={this.props.title}
+                                changeTitle={this.changeListTitle} tasksCount={tasksCount}
+                                closeList={this.props.closeList}/>
                 {
                     !this.state.addForm ? tasksForm : addTaskForm
                 }
@@ -91,7 +99,13 @@ let mdtp = (dispatch: ThunkDispatch<any, any, ActionsTypes>): IMDTP => {
         deleteTask: (listId: string, taskId: string) => {
             let thunk = deleteTaskTC(listId, taskId);
             dispatch(thunk)
+        },
+        changeListTitle: (listId: string, title: string) => {
+            let thunk = changeListTitleTC(listId, title);
+            dispatch(thunk)
         }
     }
 };
+
+
 export default connect(null, mdtp)(TodoList);

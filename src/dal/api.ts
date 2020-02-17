@@ -23,8 +23,13 @@ export const api = {
             return res.data.data.item;
         })
     },
+    addList(title: string) {
+        return instance.post(`/`, {title: title}).then((res) => {
+            return res.data.data.item;
+        })
+    },
     changeTask(listId: string, taskId: string, task: ITask) {
-        return instance.put(`/${listId}/tasks/${taskId}`, {...task}).then(res => {
+        return instance.put(`/${listId}/tasks/${taskId}`, task).then(res => {
             return res.data.data.item;
         })
     },
@@ -32,5 +37,16 @@ export const api = {
         return instance.delete(`/${listId}/tasks/${taskId}`).then(res => {
             return res.data.resultCode;
         })
+    },
+    deleteList(listId: string) {
+        return instance.delete(`/${listId}`).then(res => {
+            return res.data.resultCode;
+        })
+    },
+    changeListTitle(listId: string, title: string) {
+        return instance.put(`/${listId}`, {title}).then(res => {
+            return res.data
+        })
     }
+
 };

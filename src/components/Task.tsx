@@ -1,6 +1,7 @@
 import *as React from "react";
 import {ChangeEvent} from "react";
 import {ITask, TasksStatus, ITaskUpdate} from "../types/ActionTypes";
+import DeleteButton from "./DeleteButton";
 
 const s = require("./TodoList.module.css");
 
@@ -39,7 +40,7 @@ class Task extends React.Component<IProps> {
                     <div className={s.taskTitle}>{task.title}</div>
                     <div className={s.taskText}>{task.description}</div>
                 </div>
-                <div className={s.deleteButton} onClick={this.deleteTask}></div>
+                <DeleteButton onClick={this.deleteTask}/>
             </div>
         )
     }
