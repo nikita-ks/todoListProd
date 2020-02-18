@@ -4,7 +4,7 @@ const s = require("./TodoList.module.css");
 
 interface IProps {
     onClick: (event: React.MouseEvent<HTMLElement>) => void;
-    position?: any;
+    position?: string;
 }
 
 function DeleteButton(props: IProps) {
@@ -18,7 +18,6 @@ function DeleteButton(props: IProps) {
             opacity:0.1
         };
     }
-
     return (
         <div className={s.deleteButton} style={{...styles}} onClick={props.onClick}></div>
     )

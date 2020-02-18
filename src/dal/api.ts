@@ -47,6 +47,16 @@ export const api = {
         return instance.put(`/${listId}`, {title}).then(res => {
             return res.data
         })
-    }
+    },
+    async login() {
+        try {
+            let result = await axios.post('https://social-network.samuraijs.com/api/1.0/auth/login',
+                {email: 'pancxxx@gmail.com', password: 'todolistproduction'},
+                {withCredentials: true,
+                    headers: {'API-KEY': 'a1408a51-e2c8-48b4-9b0f-06ce8121bd8d'}});
+        } catch(e) {
 
+        }
+
+    }
 };

@@ -18,7 +18,9 @@ class TodoListTabs extends React.Component<IProps> {
     };
     delete = (event: React.MouseEvent<HTMLElement>) => {
         event.stopPropagation();
-        this.props.deleteList(this.props.id)
+        if (this.props.id !== '4703b1d4-fd58-473c-8bfa-6bdf9a614e94'){
+            this.props.deleteList(this.props.id)
+        }
     };
 
     render() {

@@ -20,12 +20,14 @@ class AddTodoListForm extends React.Component<IProps, IState> {
     };
     setTitle = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.value.length <= 15) {
-            debugger
             this.setState({title: e.currentTarget.value})
         }
     };
     addNewList = () => {
-        this.props.addNewList(this.state.title)
+        if(this.state.title){
+            this.props.addNewList(this.state.title)
+        }
+
     };
 
     render() {

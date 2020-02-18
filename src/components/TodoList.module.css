@@ -231,8 +231,8 @@
     transition: all .3s ease;
     text-transform: uppercase;
     font-family: Bebas-Regular, sans-serif;
-    font-size: 24px;
-    line-height: 24px;
+    font-size: 22px;
+    line-height: 22px;
 }
 
 .todoListsWrapper:hover {

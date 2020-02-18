@@ -11,9 +11,11 @@ import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {getTodolistsSelector} from './redux/Selectors';
 import AddTodoListForm from "./components/AddTodoListForm";
 import TodoListTabsWrapper from "./components/TodoListTabsWrapper";
+import {api} from './dal/api';
 
 interface IProps extends RouteComponentProps<any> {
-    id?: string
+    id?: string;
+    height?:number
 }
 
 interface IMstp {
@@ -37,7 +39,8 @@ class App extends React.Component<IMstp & IMdtp & IProps, IState> {
         addMode: false
     };
 
-    componentDidMount(): void {
+    async componentDidMount() {
+        await api.login();
         this.props.getTodoLists()
     }
 
@@ -57,7 +60,6 @@ class App extends React.Component<IMstp & IMdtp & IProps, IState> {
     };
 
     render() {
-        //почему если ставлю точку останова срабатывает много раз???
         let todoLists = this.props.todoLists.map(tl => {
             return <TodoListTabs history={this.props.history} key={tl.id} id={tl.id} title={tl.title}
                                  count={tl.tasks.length} deleteList={this.deleteTodoList}/>
@@ -65,7 +67,7 @@ class App extends React.Component<IMstp & IMdtp & IProps, IState> {
 
         let currentTodoList = this.props.todoLists.find((tl: ITodoList) => tl.id === this.props.match.params.id);
         return (
-            <div className="App">
+            <div className="App" style={{maxHeight:this.props.height}}>
                 <div className='App-in'>
                     {
                         this.props.match.params.id && currentTodoList
