@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/todoListProd/static/css/main.cb9cb04a.chunk.css",
+    "main.css": "/todoListProd/static/css/main.171d1772.chunk.css",
     "main.js": "/todoListProd/static/js/main.1c1beb60.chunk.js",
     "main.js.map": "/todoListProd/static/js/main.1c1beb60.chunk.js.map",
     "runtime-main.js": "/todoListProd/static/js/runtime-main.88ca66d0.js",
@@ -8,9 +8,9 @@
     "static/js/2.816d75b8.chunk.js": "/todoListProd/static/js/2.816d75b8.chunk.js",
     "static/js/2.816d75b8.chunk.js.map": "/todoListProd/static/js/2.816d75b8.chunk.js.map",
     "index.html": "/todoListProd/index.html",
-    "precache-manifest.91a9097c7073121876f5558e30cc1c29.js": "/todoListProd/precache-manifest.91a9097c7073121876f5558e30cc1c29.js",
+    "precache-manifest.f325f92016b3d713cb5c35f28e3b50f5.js": "/todoListProd/precache-manifest.f325f92016b3d713cb5c35f28e3b50f5.js",
     "service-worker.js": "/todoListProd/service-worker.js",
-    "static/css/main.cb9cb04a.chunk.css.map": "/todoListProd/static/css/main.cb9cb04a.chunk.css.map",
+    "static/css/main.171d1772.chunk.css.map": "/todoListProd/static/css/main.171d1772.chunk.css.map",
     "static/js/2.816d75b8.chunk.js.LICENSE": "/todoListProd/static/js/2.816d75b8.chunk.js.LICENSE",
     "static/media/Bebas-Regular.ttf": "/todoListProd/static/media/Bebas-Regular.1cb1f763.ttf",
     "static/media/index.css": "/todoListProd/static/media/Bebas-Regular.f2e8a575.svg",
@@ -20,7 +20,7 @@
   "entrypoints": [
     "static/js/runtime-main.88ca66d0.js",
     "static/js/2.816d75b8.chunk.js",
-    "static/css/main.cb9cb04a.chunk.css",
+    "static/css/main.171d1772.chunk.css",
     "static/js/main.1c1beb60.chunk.js"
   ]
 }
