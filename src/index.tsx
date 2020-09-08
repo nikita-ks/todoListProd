@@ -1,9 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import './index.css';
-import './fonts/Bebas-Regular.ttf';
-import './fonts/BebasNeue-Light.ttf';
-import './fonts/BebasNeue-Book.ttf';
+// import './fonts/Bebas-Regular.ttf';
+// import './fonts/BebasNeue-Light.ttf';
+// import './fonts/BebasNeue-Book.ttf';
 import * as serviceWorker from './serviceWorker';
 import store from "./redux/store";
 import {Provider} from "react-redux";

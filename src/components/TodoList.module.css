@@ -59,14 +59,14 @@
     font-size: 20px;
     font-weight: 700;
     text-align: center;
-    font-family: Bebas-Regular, sans-serif;
+    /*font-family: Bebas-Regular, sans-serif;*/
     color: #fff;
     text-transform: uppercase;
 }
 
 
 .headerWrapper .tasksCounter {
-    font-family: Bebas-Regular, sans-serif;
+    /*font-family: Bebas-Regular, sans-serif;*/
     font-size: 15px;
     font-weight: 400;
 }
@@ -230,7 +230,7 @@
     position: relative;
     transition: all .3s ease;
     text-transform: uppercase;
-    font-family: Bebas-Regular, sans-serif;
+    /*font-family: Bebas-Regular, sans-serif;*/
     font-size: 22px;
     line-height: 22px;
 }
@@ -293,7 +293,7 @@
 .title {
     font-size: 30px;
     font-weight: 700;
-    font-family: Bebas-Regular, sans-serif;
+    /*font-family: Bebas-Regular, sans-serif;*/
 }
 
 .title.h4 {
