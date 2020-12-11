@@ -88,8 +88,8 @@ class TodoList extends React.Component<IProps & IMDTP, IState> {
 
 let mdtp = (dispatch: ThunkDispatch<any, any, ActionsTypes>): IMDTP => {
     return {
-        addTask: (listId: string, title: string, description: string) => {
-            let thunk = addTaskTC(listId, title, description);
+        addTask: (todolistId: string, title: string, description: string) => {
+            let thunk = addTaskTC({todolistId, title, description});
             dispatch(thunk)
         },
         changeTask: (listId: string, taskId: string, obj: ITaskUpdate) => {

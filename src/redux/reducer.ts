@@ -1,19 +1,11 @@
-import {
-    ISetTodoListActionTypes,
-    ITodoList,
-    ActionsTypes,
-    ITask,
-    IAddTaskActionTypes,
-    ITaskUpdate,
-    IDeleteTaskActionTypes,
-    IChangeListTitle,
-    IAddListActionTypes,
-    IChangeTaskActionTypes, IDeleteList,
-} from "../types/ActionTypes";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "redux";
 import { api } from "../dal/api";
+import {
+    ITask,
+    ITaskUpdate, ITodoList
+} from "../types/ActionTypes";
 import { AppState } from "./store";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export const SET_TODOLISTS = 'todolist/reducer/SET_TODOLISTS';
 export const SET_TASKS = 'todolist/reducer/SET_TASKS';
@@ -29,10 +21,24 @@ interface IInitialState {
 }
 
 
-
 let initialState: IInitialState = {
     todoLists: []
 };
+
+export const addTaskTC = createAsyncThunk('reducer/addTaskTC', async (payload: { todolistId: string, title: string, description: string }, thunkAPI) => {
+    try {
+        const res = await api.addTask(payload.todolistId, payload.title)
+        const res2 = await api.changeTask(payload.todolistId, res.id, { ...res, description: payload.description })
+        return { todolistId: payload.todolistId, newTask: res2 }
+    } catch {
+
+    }
+    // const res = await api.addTask(payload.todolistId, payload.title).then((newTask: ITask) => {
+    //     api.changeTask(todolistId, newTask.id, { ...newTask, description }).then((res: ITask) => {
+    //         dispatch(addTaskAC({ todolistId, newTask: res }))
+    //     })
+    // })
+})
 
 const slice = createSlice({
     name: 'reducer',
@@ -42,10 +48,10 @@ const slice = createSlice({
             // return { todoLists: action.payload.todoList }
             state.todoLists.push(action.payload.todoList)
         },
-        addTaskAC(state, action: PayloadAction<{ todolistId: string, newTask: ITask }>) {
-            const index = state.todoLists.findIndex(tl => tl.id === action.payload.todolistId)
-            state.todoLists[index].tasks.push(action.payload.newTask)
-        },
+        // addTaskAC(state, action: PayloadAction<{ todolistId: string, newTask: ITask }>) {
+        //     const index = state.todoLists.findIndex(tl => tl.id === action.payload.todolistId)
+        //     state.todoLists[index].tasks.push(action.payload.newTask)
+        // },
         addListAC(state, action: PayloadAction<{ newList: ITodoList }>) {
             state.todoLists.push(action.payload.newList)
         },
@@ -67,11 +73,16 @@ const slice = createSlice({
             const TlIndex = state.todoLists.findIndex(tl => tl.id === action.payload.listId)
             state.todoLists[TlIndex].title = action.payload.title
         }
+    },
+    extraReducers: builder => {
+        builder.addCase(addTaskTC.fulfilled, (state, { payload }) => {
+            const index = state.todoLists.findIndex(tl => tl.id === payload?.todolistId)
+            state.todoLists[index].tasks.push(payload?.newTask)
+        })
     }
 })
 export const reducer = slice.reducer
-const { setTodolistsAC, addTaskAC, addListAC, changeTaskAC, deleteTaskAC, deleteListAC, changeListTitleAC } = slice.actions
-
+const { setTodolistsAC, addListAC, changeTaskAC, deleteTaskAC, deleteListAC, changeListTitleAC } = slice.actions
 
 
 // export const reducerS = (state = initialState, action: ActionsTypes): IInitialState => {
@@ -205,6 +216,10 @@ const { setTodolistsAC, addTaskAC, addListAC, changeTaskAC, deleteTaskAC, delete
 //     return { type: CHANGE_LIST_TITLE, listId, title }
 // };
 
+
+
+
+
 export const setTodoListsTC = () => (dispatch: Dispatch) => {
     api.getTodoLists().then((todoLists: ITodoList[]) => {
         todoLists.forEach((tl: ITodoList) => {
@@ -215,13 +230,13 @@ export const setTodoListsTC = () => (dispatch: Dispatch) => {
     })
 };
 
-export const addTaskTC = (todolistId: string, title: string, description: string) => (dispatch: Dispatch) => {
-    api.addTask(todolistId, title).then((newTask: ITask) => {
-        api.changeTask(todolistId, newTask.id, { ...newTask, description }).then((res: ITask) => {
-            dispatch(addTaskAC({ todolistId, newTask: res }))
-        })
-    })
-};
+// export const addTaskTC = (todolistId: string, title: string, description: string) => (dispatch: Dispatch) => {
+//     api.addTask(todolistId, title).then((newTask: ITask) => {
+//         api.changeTask(todolistId, newTask.id, {...newTask, description}).then((res: ITask) => {
+//             dispatch(addTaskAC({todolistId, newTask: res}))
+//         })
+//     })
+// };
 export const addListTC = (title: string) => (dispatch: Dispatch) => {
     api.addList(title).then((newList: ITodoList) => {
         dispatch(addListAC({ newList: { ...newList, tasks: [] } }))
